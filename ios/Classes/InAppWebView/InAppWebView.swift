@@ -667,7 +667,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 snapshotConfiguration!.afterScreenUpdates = afterScreenUpdates
             }
 
-            if let snapshotConf = with["snapshotConfiguration"] as? [String: Any?] {
+            if let snapshotConf = with["screenshotConfiguration"] {
                 takeSnapshot(with: snapshotConfiguration, completionHandler: {(image, error) -> Void in
                     var imageData: Data? = nil
                     if let screenshot = image {
