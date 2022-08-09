@@ -45,6 +45,8 @@ public class FlutterWebView implements PlatformWebView {
 
   public FlutterWebView(final InAppWebViewFlutterPlugin plugin, final Context context, Object id,
                         HashMap<String, Object> params) {
+
+    WebView.enableSlowWholeDocumentDraw();
     channel = new MethodChannel(plugin.messenger, "com.pichillilorenzo/flutter_inappwebview_" + id);
 
     DisplayListenerProxy displayListenerProxy = new DisplayListenerProxy();
