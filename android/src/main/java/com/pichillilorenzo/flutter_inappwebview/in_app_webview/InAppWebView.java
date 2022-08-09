@@ -578,9 +578,9 @@ final public class InAppWebView extends InputAwareWebView implements InAppWebVie
       public void run() {
         try {
           int contentHeight = getMeasuredHeight();
-          if (screenshotConfiguration == null) {
+          //if (screenshotConfiguration == null) {
             contentHeight = (int) Math.floor(getContentHeight() * pixelDensity);
-          }
+          //}
 
           Bitmap screenshotBitmap = Bitmap.createBitmap(getMeasuredWidth(), contentHeight, Bitmap.Config.ARGB_8888);
           Canvas c = new Canvas(screenshotBitmap);
