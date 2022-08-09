@@ -690,8 +690,8 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                     }
                     completionHandler(imageData)
                 })
-            //}
-            //else {
+            /*}
+            else {
                 // save the original size to restore later
                 let originalFrame = self.frame
                 let originalConstraints = self.constraints
@@ -745,7 +745,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                         completionHandler(imageData)
                     }
                 }
-            //}
+            }*/
         }
     }
     
