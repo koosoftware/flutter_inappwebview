@@ -667,7 +667,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 snapshotConfiguration!.afterScreenUpdates = afterScreenUpdates
             }
 
-            if let rectNew = with["rect"] as? [String: Double] {
+            //if let rectNew = with["rect"] as? [String: Double] {
                 takeSnapshot(with: snapshotConfiguration, completionHandler: {(image, error) -> Void in
                     var imageData: Data? = nil
                     if let screenshot = image {
@@ -690,8 +690,8 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                     }
                     completionHandler(imageData)
                 })
-            }
-            else {
+            //}
+            //else {
                 // save the original size to restore later
                 let originalFrame = self.frame
                 let originalConstraints = self.constraints
@@ -745,7 +745,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                         completionHandler(imageData)
                     }
                 }
-            }
+            //}
         }
     }
     
