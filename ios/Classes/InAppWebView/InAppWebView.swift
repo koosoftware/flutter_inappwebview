@@ -654,6 +654,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
     
     @available(iOS 11.0, *)
     public func takeScreenshot (with: [String: Any?]?, completionHandler: @escaping (_ screenshot: Data?) -> Void) {
+        var rect = nil
         var snapshotConfiguration: WKSnapshotConfiguration? = nil
         if let with = with {
             snapshotConfiguration = WKSnapshotConfiguration()
@@ -666,10 +667,64 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             if #available(iOS 13.0, *), let afterScreenUpdates = with["iosAfterScreenUpdates"] as? Bool {
                 snapshotConfiguration!.afterScreenUpdates = afterScreenUpdates
             }
+        }
 
-            //if let rectNew = with["rect"] as? [String: Double] {
-                takeSnapshot(with: snapshotConfiguration, completionHandler: {(image, error) -> Void in
+        if let ssConf = snapshotConfiguration {
+            takeSnapshot(with: snapshotConfiguration, completionHandler: {(image, error) -> Void in
+                var imageData: Data? = nil
+                if let screenshot = image {
+                    if let with = with {
+                        switch with["compressFormat"] as! String {
+                        case "JPEG":
+                            let quality = Float(with["quality"] as! Int) / 100
+                            imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
+                            break
+                        case "PNG":
+                            imageData = screenshot.pngData()
+                            break
+                        default:
+                            imageData = screenshot.pngData()
+                        }
+                    }
+                    else {
+                        imageData = screenshot.pngData()
+                    }
+                }
+                completionHandler(imageData)
+            })
+        }
+        else {
+            // save the original size to restore later
+            let originalFrame = self.frame
+            let originalConstraints = self.constraints
+            let originalScrollViewOffset = self.scrollView.contentOffset
+            let newSize = self.scrollView.contentSize
+
+            // remove any constraints for the web view, and set the size
+            // to be size of the content size (will be restored later)
+            self.removeConstraints(originalConstraints)
+            self.translatesAutoresizingMaskIntoConstraints = true
+            self.frame = CGRect(origin: .zero, size: newSize)
+            self.scrollView.contentOffset = .zero
+
+            // wait for a while for the webview to render in the newly set frame
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                defer {
+                    UIGraphicsEndImageContext()
+                }
+                UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+                if let context = UIGraphicsGetCurrentContext() {
+                    // render the scroll view's layer
+                    self.scrollView.layer.render(in: context)
+
+                    // restore the original state
+                    self.frame = originalFrame
+                    self.translatesAutoresizingMaskIntoConstraints = false
+                    self.addConstraints(originalConstraints)
+                    self.scrollView.contentOffset = originalScrollViewOffset
+
                     var imageData: Data? = nil
+                    let image = UIGraphicsGetImageFromCurrentImageContext()
                     if let screenshot = image {
                         if let with = with {
                             switch with["compressFormat"] as! String {
@@ -688,64 +743,10 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                             imageData = screenshot.pngData()
                         }
                     }
+                    
                     completionHandler(imageData)
-                })
-            /*}
-            else {
-                // save the original size to restore later
-                let originalFrame = self.frame
-                let originalConstraints = self.constraints
-                let originalScrollViewOffset = self.scrollView.contentOffset
-                let newSize = self.scrollView.contentSize
-
-                // remove any constraints for the web view, and set the size
-                // to be size of the content size (will be restored later)
-                self.removeConstraints(originalConstraints)
-                self.translatesAutoresizingMaskIntoConstraints = true
-                self.frame = CGRect(origin: .zero, size: newSize)
-                self.scrollView.contentOffset = .zero
-
-                // wait for a while for the webview to render in the newly set frame
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    defer {
-                        UIGraphicsEndImageContext()
-                    }
-                    UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
-                    if let context = UIGraphicsGetCurrentContext() {
-                        // render the scroll view's layer
-                        self.scrollView.layer.render(in: context)
-
-                        // restore the original state
-                        self.frame = originalFrame
-                        self.translatesAutoresizingMaskIntoConstraints = false
-                        self.addConstraints(originalConstraints)
-                        self.scrollView.contentOffset = originalScrollViewOffset
-
-                        var imageData: Data? = nil
-                        let image = UIGraphicsGetImageFromCurrentImageContext()
-                        if let screenshot = image {
-                            if let with = with {
-                                switch with["compressFormat"] as! String {
-                                case "JPEG":
-                                    let quality = Float(with["quality"] as! Int) / 100
-                                    imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
-                                    break
-                                case "PNG":
-                                    imageData = screenshot.pngData()
-                                    break
-                                default:
-                                    imageData = screenshot.pngData()
-                                }
-                            }
-                            else {
-                                imageData = screenshot.pngData()
-                            }
-                        }
-                        
-                        completionHandler(imageData)
-                    }
                 }
-            }*/
+            }
         }
     }
     
