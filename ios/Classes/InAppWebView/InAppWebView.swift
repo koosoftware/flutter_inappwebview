@@ -654,7 +654,6 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
     
     @available(iOS 11.0, *)
     public func takeScreenshot (with: [String: Any?]?, completionHandler: @escaping (_ screenshot: Data?) -> Void) {
-        var rect = nil
         var snapshotConfiguration: WKSnapshotConfiguration? = nil
         if let with = with {
             snapshotConfiguration = WKSnapshotConfiguration()
