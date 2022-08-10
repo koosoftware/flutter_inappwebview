@@ -581,7 +581,14 @@ final public class InAppWebView extends InputAwareWebView implements InAppWebVie
 
           Bitmap screenshotBitmap = Bitmap.createBitmap(getMeasuredWidth(), contentHeight, Bitmap.Config.ARGB_8888);
           Canvas c = new Canvas(screenshotBitmap);
-          c.translate(-getScrollX(), -getScrollY());
+
+          if (screenshotConfiguration != null) {
+            Map<String, Double> rec = (Map<String, Double>) screenshotConfiguration.get("rect");
+            if (rec != null) {
+              c.translate(-getScrollX(), -getScrollY());
+            }
+          }
+          
           draw(c);
 
           ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
