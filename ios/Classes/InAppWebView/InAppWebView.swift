@@ -755,10 +755,13 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             self.frame = CGRect(origin: .zero, size: newSize)
             //self.scrollView.contentOffset = .zero
 
-            newSize = self.scrollView.contentSize
-            self.frame = CGRect(origin: .zero, size: newSize)
-
             // wait for a while for the webview to render in the newly set frame
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+            if let context = UIGraphicsGetCurrentContext() {
+                // render the scroll view's layer
+                self.scrollView.layer.render(in: context)
+            }
+
             UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
             if let context = UIGraphicsGetCurrentContext() {
                 // render the scroll view's layer
