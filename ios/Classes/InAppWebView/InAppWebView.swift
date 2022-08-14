@@ -755,12 +755,6 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             self.frame = CGRect(origin: .zero, size: newSize)
             //self.scrollView.contentOffset = .zero
 
-            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
-            let resizedContext: CGContext = UIGraphicsGetCurrentContext()!
-            self.layer.render(in: resizedContext)
-            UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-
 
             // wait for a while for the webview to render in the newly set frame
             UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
