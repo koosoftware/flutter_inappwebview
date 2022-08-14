@@ -701,8 +701,11 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             fullSizeFrame.size.height = self.scrollView.contentSize.height
             self.frame = fullSizeFrame
 
+            let newSize = self.scrollView.contentSize
+            self.frame = CGRect(origin: .zero, size: newSize)
+
             // here the image magic begins
-            UIGraphicsBeginImageContextWithOptions(fullSizeFrame.size, false, 0)
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
             let resizedContext: CGContext = UIGraphicsGetCurrentContext()!
             self.layer.render(in: resizedContext)
             DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
