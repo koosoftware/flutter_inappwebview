@@ -703,7 +703,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
 
             // here the image magic begins
             UIGraphicsBeginImageContextWithOptions(fullSizeFrame.size, false, 0)
-            let resizedContext: CGContextRef = UIGraphicsGetCurrentContext()!
+            let resizedContext: CGContext = UIGraphicsGetCurrentContext()!
             self.layer.render(in: resizedContext)
             let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
