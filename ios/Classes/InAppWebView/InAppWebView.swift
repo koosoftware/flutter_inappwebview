@@ -693,8 +693,38 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             })
         }
         else {
+            var image :UIImage?
+            let currentLayer = UIApplication.shared.keyWindow!.layer
+            let currentScale = UIScreen.main.scale
+            UIGraphicsBeginImageContextWithOptions(currentLayer.frame.size, false, currentScale);
+            guard let currentContext = UIGraphicsGetCurrentContext() else {return}
+            currentLayer.render(in: currentContext)
+            var imageData: Data? = nil
+            image = UIGraphicsGetImageFromCurrentImageContext()
+            if let screenshot = image {
+                        if let with = with {
+                            switch with["compressFormat"] as! String {
+                            case "JPEG":
+                                let quality = Float(with["quality"] as! Int) / 100
+                                imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
+                                break
+                            case "PNG":
+                                imageData = screenshot.pngData()
+                                break
+                            default:
+                                imageData = screenshot.pngData()
+                            }
+                        }
+                        else {
+                            imageData = screenshot.pngData()
+                        }
+                    }
+                    
+                    completionHandler(imageData)
+            UIGraphicsEndImageContext()
+
             // save the original size to restore later
-            let originalFrame = self.frame
+            /*let originalFrame = self.frame
             let originalConstraints = self.constraints
             let originalScrollViewOffset = self.scrollView.contentOffset
             let newSize = self.scrollView.contentSize
@@ -706,45 +736,9 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             self.frame = CGRect(origin: .zero, size: newSize)
             self.scrollView.contentOffset = .zero
 
-            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
-            if let context = UIGraphicsGetCurrentContext() {
-                // render the scroll view's layer
-                self.scrollView.layer.render(in: context)
-
-                // restore the original state
-                self.frame = originalFrame
-                self.translatesAutoresizingMaskIntoConstraints = false
-                self.addConstraints(originalConstraints)
-                self.scrollView.contentOffset = originalScrollViewOffset
-
-                var imageData: Data? = nil
-                let image = UIGraphicsGetImageFromCurrentImageContext()
-                if let screenshot = image {
-                    if let with = with {
-                        switch with["compressFormat"] as! String {
-                        case "JPEG":
-                            let quality = Float(with["quality"] as! Int) / 100
-                            imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
-                            break
-                        case "PNG":
-                            imageData = screenshot.pngData()
-                            break
-                        default:
-                            imageData = screenshot.pngData()
-                        }
-                    }
-                    else {
-                        imageData = screenshot.pngData()
-                    }
-                }
-                
-                completionHandler(imageData)
-            }
-            
-            UIGraphicsEndImageContext()
 
             // wait for a while for the webview to render in the newly set frame
-            /*DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 defer {
                     UIGraphicsEndImageContext()
                 }
