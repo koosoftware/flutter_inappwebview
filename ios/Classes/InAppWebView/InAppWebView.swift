@@ -708,7 +708,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             var image :UIImage?
             let currentLayer = UIApplication.shared.keyWindow!.layer
             let currentScale = UIScreen.main.scale
-            UIGraphicsBeginImageContextWithOptions(currentLayer.frame.size, false, currentScale);
+            UIGraphicsBeginImageContextWithOptions(newSize, false, currentScale);
             guard let currentContext = UIGraphicsGetCurrentContext() else {return}
             currentLayer.render(in: currentContext)
             var imageData: Data? = nil
