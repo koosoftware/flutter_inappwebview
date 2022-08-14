@@ -701,42 +701,39 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             fullSizeFrame.size.height = self.scrollView.contentSize.height
             self.frame = fullSizeFrame
 
+            // here the image magic begins
+            UIGraphicsBeginImageContextWithOptions(fullSizeFrame.size, false, 0)
+            let resizedContext: CGContext = UIGraphicsGetCurrentContext()!
+            self.layer.render(in: resizedContext)
             DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                defer {
-                    UIGraphicsEndImageContext()
-                }
-
-                // here the image magic begins
-                UIGraphicsBeginImageContextWithOptions(fullSizeFrame.size, false, 0)
-                let resizedContext: CGContext = UIGraphicsGetCurrentContext()!
-                self.layer.render(in: resizedContext)
                 let image = UIGraphicsGetImageFromCurrentImageContext()
-                //UIGraphicsEndImageContext()
+                UIGraphicsEndImageContext()
                 // reset Frame of view to origin
                 self.frame = tmpFrame
 
                 var imageData: Data? = nil
                 if let screenshot = image {
-                            if let with = with {
-                                switch with["compressFormat"] as! String {
-                                case "JPEG":
-                                    let quality = Float(with["quality"] as! Int) / 100
-                                    imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
-                                    break
-                                case "PNG":
-                                    imageData = screenshot.pngData()
-                                    break
-                                default:
-                                    imageData = screenshot.pngData()
-                                }
-                            }
-                            else {
+                        if let with = with {
+                            switch with["compressFormat"] as! String {
+                            case "JPEG":
+                                let quality = Float(with["quality"] as! Int) / 100
+                                imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
+                                break
+                            case "PNG":
+                                imageData = screenshot.pngData()
+                                break
+                            default:
                                 imageData = screenshot.pngData()
                             }
                         }
-                        
-                        completionHandler(imageData)
-                }
+                        else {
+                            imageData = screenshot.pngData()
+                        }
+                    }
+                    
+                    completionHandler(imageData)
+            }
+            
 
             
 
