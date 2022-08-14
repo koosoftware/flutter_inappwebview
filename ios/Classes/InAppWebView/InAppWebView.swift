@@ -702,9 +702,9 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             self.frame = fullSizeFrame
 
             // here the image magic begins
-            UIGraphicsBeginImageContextWithOptions(fullSizeFrame.size, false, UIScreen.mainScreen().scale)
-            let resizedContext = UIGraphicsGetCurrentContext()!
-            self.layer.renderInContext(resizedContext)
+            UIGraphicsBeginImageContextWithOptions(fullSizeFrame.size, false, 0)
+            let resizedContext: CGContextRef = UIGraphicsGetCurrentContext()!
+            self.layer.render(in: resizedContext)
             let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             // reset Frame of view to origin
