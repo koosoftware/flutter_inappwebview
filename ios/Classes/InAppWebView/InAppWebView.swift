@@ -693,8 +693,33 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             })
         }
         else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                takeSnapshot(with: snapshotConfiguration, completionHandler: {(image, error) -> Void in
+                    var imageData: Data? = nil
+                    if let screenshot = image {
+                        if let with = with {
+                            switch with["compressFormat"] as! String {
+                            case "JPEG":
+                                let quality = Float(with["quality"] as! Int) / 100
+                                imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
+                                break
+                            case "PNG":
+                                imageData = screenshot.pngData()
+                                break
+                            default:
+                                imageData = screenshot.pngData()
+                            }
+                        }
+                        else {
+                            imageData = screenshot.pngData()
+                        }
+                    }
+                    completionHandler(imageData)
+                })
+            }
+
             // save the original size to restore later
-            let originalFrame = self.frame
+            /*let originalFrame = self.frame
             let originalConstraints = self.constraints
             let originalScrollViewOffset = self.scrollView.contentOffset
             let newSize = self.scrollView.contentSize
@@ -746,7 +771,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                     
                     completionHandler(imageData)
                 }
-            }
+            }*/
         }
     }
     
