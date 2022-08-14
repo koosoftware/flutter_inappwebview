@@ -743,7 +743,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
 
 
             // save the original size to restore later
-            let originalFrame = self.frame
+            //let originalFrame = self.frame
             //let originalConstraints = self.constraints
             //let originalScrollViewOffset = self.scrollView.contentOffset
             let newSize = self.scrollView.contentSize
