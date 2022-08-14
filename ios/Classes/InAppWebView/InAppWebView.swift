@@ -790,11 +790,11 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                             imageData = screenshot.pngData()
                         }
                     }
-                    
+                    UIGraphicsEndImageContext()
                     completionHandler(imageData)
 
                 //}
-                UIGraphicsEndImageContext()
+                
 
                 // restore the original state
                 //self.frame = originalFrame
