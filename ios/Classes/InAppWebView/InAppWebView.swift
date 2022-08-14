@@ -762,7 +762,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 self.scrollView.layer.render(in: context)
             }
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            //DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                 //defer {
                     //UIGraphicsEndImageContext()
                 //}
@@ -803,7 +803,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 //self.scrollView.contentOffset = originalScrollViewOffset
 
 
-            }
+            //}
         }
     }
     
