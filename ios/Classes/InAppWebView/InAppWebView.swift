@@ -808,7 +808,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
 
             var window: UIWindow? = UIApplication.shared.keyWindow
             window = UIApplication.shared.windows[0] as? UIWindow
-            UIGraphicsBeginImageContextWithOptions(window!.frame.size, window!.isOpaque, 0.0)
+            UIGraphicsBeginImageContextWithOptions(1000, window!.isOpaque, 0.0)
             window!.layer.render(in: UIGraphicsGetCurrentContext()!)
 
             var imageData: Data? = nil
