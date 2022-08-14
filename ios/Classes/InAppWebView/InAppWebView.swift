@@ -705,7 +705,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             UIGraphicsBeginImageContextWithOptions(fullSizeFrame.size, false, UIScreen.mainScreen().scale)
             let resizedContext: CGContextRef = UIGraphicsGetCurrentContext()!
             self.layer.renderInContext(resizedContext)
-            let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+            let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             // reset Frame of view to origin
             self.frame = tmpFrame
