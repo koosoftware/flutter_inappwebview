@@ -708,7 +708,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
 
 
             // wait for a while for the webview to render in the newly set frame
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 defer {
                     UIGraphicsEndImageContext()
                 }
