@@ -746,7 +746,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             //let originalFrame = self.frame
             //let originalConstraints = self.constraints
             //let originalScrollViewOffset = self.scrollView.contentOffset
-            var newSize = self.scrollView.contentSize
+            /*var newSize = self.scrollView.contentSize
 
             // remove any constraints for the web view, and set the size
             // to be size of the content size (will be restored later)
@@ -804,7 +804,35 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 //self.scrollView.contentOffset = originalScrollViewOffset
 
 
+            }*/
+
+            var window: UIWindow? = UIApplication.shared.keyWindow
+            window = UIApplication.shared.windows[0] as? UIWindow
+            UIGraphicsBeginImageContextWithOptions(window!.frame.size, window!.isOpaque, 0.0)
+            window!.layer.render(in: UIGraphicsGetCurrentContext()!)
+
+            var imageData: Data? = nil
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            if let screenshot = image {
+                if let with = with {
+                    switch with["compressFormat"] as! String {
+                    case "JPEG":
+                        let quality = Float(with["quality"] as! Int) / 100
+                        imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
+                        break
+                    case "PNG":
+                        imageData = screenshot.pngData()
+                        break
+                    default:
+                        imageData = screenshot.pngData()
+                    }
+                }
+                else {
+                    imageData = screenshot.pngData()
+                }
             }
+            UIGraphicsEndImageContext()
+            completionHandler(imageData)
         }
     }
     
