@@ -762,12 +762,6 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 self.scrollView.layer.render(in: context)
             }
 
-            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
-            if let context = UIGraphicsGetCurrentContext() {
-                // render the scroll view's layer
-                self.scrollView.layer.render(in: context)
-            }
-
             DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                 //defer {
                     //UIGraphicsEndImageContext()
@@ -807,6 +801,69 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 //self.translatesAutoresizingMaskIntoConstraints = false
                 //self.addConstraints(originalConstraints)
                 //self.scrollView.contentOffset = originalScrollViewOffset
+
+
+
+                // save the original size to restore later
+            //let originalFrame = self.frame
+            //let originalConstraints = self.constraints
+            //let originalScrollViewOffset = self.scrollView.contentOffset
+            newSize = self.scrollView.contentSize
+
+            // remove any constraints for the web view, and set the size
+            // to be size of the content size (will be restored later)
+            //self.removeConstraints(originalConstraints)
+            //self.translatesAutoresizingMaskIntoConstraints = true
+            self.frame = CGRect(origin: .zero, size: newSize)
+            //self.scrollView.contentOffset = .zero
+
+            // wait for a while for the webview to render in the newly set frame
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+            if let context2 = UIGraphicsGetCurrentContext() {
+                // render the scroll view's layer
+                self.scrollView.layer.render(in: context2)
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                //defer {
+                    //UIGraphicsEndImageContext()
+                //}
+                //if let context = UIGraphicsGetCurrentContext() {
+                    // render the scroll view's layer
+                    //self.scrollView.layer.render(in: context)
+
+                    var imageData2: Data? = nil
+                    let image2 = UIGraphicsGetImageFromCurrentImageContext()
+                    if let screenshot2 = image2 {
+                        if let with = with {
+                            switch with["compressFormat"] as! String {
+                            case "JPEG":
+                                let quality = Float(with["quality"] as! Int) / 100
+                                imageData2 = screenshot2.jpegData(compressionQuality: CGFloat(quality))
+                                break
+                            case "PNG":
+                                imageData2 = screenshot2.pngData()
+                                break
+                            default:
+                                imageData2 = screenshot2.pngData()
+                            }
+                        }
+                        else {
+                            imageData2 = screenshot2.pngData()
+                        }
+                    }
+                    
+                    completionHandler(imageData2)
+
+                //}
+                UIGraphicsEndImageContext()
+
+                // restore the original state
+                //self.frame = originalFrame
+                //self.translatesAutoresizingMaskIntoConstraints = false
+                //self.addConstraints(originalConstraints)
+                //self.scrollView.contentOffset = originalScrollViewOffset
+            }
             }
         }
     }
