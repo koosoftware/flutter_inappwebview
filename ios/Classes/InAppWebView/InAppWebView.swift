@@ -797,7 +797,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 UIGraphicsEndImageContext()
 
                 // restore the original state
-                self.frame = originalFrame
+                //self.frame = originalFrame
                 //self.translatesAutoresizingMaskIntoConstraints = false
                 //self.addConstraints(originalConstraints)
                 //self.scrollView.contentOffset = originalScrollViewOffset
