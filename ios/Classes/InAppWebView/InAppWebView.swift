@@ -757,11 +757,11 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
 
 
             // wait for a while for the webview to render in the newly set frame
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
             DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                 //defer {
                     //UIGraphicsEndImageContext()
                 //}
-                UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
                 if let context = UIGraphicsGetCurrentContext() {
                     // render the scroll view's layer
                     self.scrollView.layer.render(in: context)
