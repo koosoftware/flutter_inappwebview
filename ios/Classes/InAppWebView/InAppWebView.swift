@@ -695,7 +695,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
         else {
 
             // tempframe to reset view size after image was created
-            /*let tmpFrame: CGRect = self.frame
+            let tmpFrame: CGRect = self.frame
             // set full size Frame
             var fullSizeFrame: CGRect = self.frame
             fullSizeFrame.size.height = self.scrollView.contentSize.height
@@ -703,7 +703,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
 
             // here the image magic begins
             UIGraphicsBeginImageContextWithOptions(fullSizeFrame.size, false, UIScreen.mainScreen().scale)
-            let resizedContext: CGContextRef = UIGraphicsGetCurrentContext()!
+            let resizedContext = UIGraphicsGetCurrentContext()!
             self.layer.renderInContext(resizedContext)
             let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
@@ -730,10 +730,10 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                         }
                     }
                     
-                    completionHandler(imageData)*/
+                    completionHandler(imageData)
 
             // save the original size to restore later
-            let originalFrame = self.frame
+            /*let originalFrame = self.frame
             let originalConstraints = self.constraints
             let originalScrollViewOffset = self.scrollView.contentOffset
             let newSize = self.scrollView.contentSize
@@ -785,7 +785,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                     
                     completionHandler(imageData)
                 }
-            }
+            }*/
         }
     }
     
