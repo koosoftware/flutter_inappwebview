@@ -693,32 +693,37 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             })
         }
         else {
-            let confKoo = WKSnapshotConfiguration()
-            confKoo.rect = CGRect(origin: .zero, size: (self.scrollView.contentSize))
-
-
-            takeSnapshot(with: confKoo, completionHandler: {(image, error) -> Void in
-                var imageData: Data? = nil
-                if let screenshot = image {
-                    if let with = with {
-                        switch with["compressFormat"] as! String {
-                        case "JPEG":
-                            let quality = Float(with["quality"] as! Int) / 100
-                            imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
-                            break
-                        case "PNG":
-                            imageData = screenshot.pngData()
-                            break
-                        default:
+            var image :UIImage?
+            let currentLayer = UIApplication.shared.keyWindow!.layer
+            let currentScale = UIScreen.main.scale
+            UIGraphicsBeginImageContextWithOptions(currentLayer.frame.size, false, currentScale);
+            guard let currentContext = UIGraphicsGetCurrentContext() else {return}
+            currentLayer.render(in: currentContext)
+            var imageData: Data? = nil
+            image = UIGraphicsGetImageFromCurrentImageContext()
+            if let screenshot = image {
+                        if let with = with {
+                            switch with["compressFormat"] as! String {
+                            case "JPEG":
+                                let quality = Float(with["quality"] as! Int) / 100
+                                imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
+                                break
+                            case "PNG":
+                                imageData = screenshot.pngData()
+                                break
+                            default:
+                                imageData = screenshot.pngData()
+                            }
+                        }
+                        else {
                             imageData = screenshot.pngData()
                         }
                     }
-                    else {
-                        imageData = screenshot.pngData()
-                    }
-                }
-                completionHandler(imageData)
-            })
+                    
+                    completionHandler(imageData)
+            UIGraphicsEndImageContext()
+
+
             // save the original size to restore later
             /*let originalFrame = self.frame
             let originalConstraints = self.constraints
