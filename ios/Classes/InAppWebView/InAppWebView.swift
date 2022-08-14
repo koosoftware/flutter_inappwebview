@@ -693,10 +693,25 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             })
         }
         else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                takeSnapshot(with: snapshotConfiguration, completionHandler: {(image, error) -> Void in
-                    var imageData: Data? = nil
-                    if let screenshot = image {
+
+            // tempframe to reset view size after image was created
+            let tmpFrame: CGRect = self.frame
+            // set full size Frame
+            var fullSizeFrame: CGRect = self.frame
+            fullSizeFrame.size.height = self.scrollView.contentSize.height
+            self.frame = fullSizeFrame
+
+            // here the image magic begins
+            UIGraphicsBeginImageContextWithOptions(fullSizeFrame.size, false, UIScreen.mainScreen().scale)
+            let resizedContext: CGContextRef = UIGraphicsGetCurrentContext()!
+            self.layer.renderInContext(resizedContext)
+            let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            // reset Frame of view to origin
+            self.frame = tmpFrame
+
+            var imageData: Data? = nil
+            if let screenshot = image {
                         if let with = with {
                             switch with["compressFormat"] as! String {
                             case "JPEG":
@@ -714,9 +729,8 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                             imageData = screenshot.pngData()
                         }
                     }
+                    
                     completionHandler(imageData)
-                })
-            }
 
             // save the original size to restore later
             /*let originalFrame = self.frame
@@ -733,7 +747,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
 
 
             // wait for a while for the webview to render in the newly set frame
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 defer {
                     UIGraphicsEndImageContext()
                 }
