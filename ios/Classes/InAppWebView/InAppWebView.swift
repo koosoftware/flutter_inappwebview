@@ -770,12 +770,6 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                     // render the scroll view's layer
                     //self.scrollView.layer.render(in: context)
 
-                    // restore the original state
-                    self.frame = originalFrame
-                    //self.translatesAutoresizingMaskIntoConstraints = false
-                    //self.addConstraints(originalConstraints)
-                    //self.scrollView.contentOffset = originalScrollViewOffset
-
                     var imageData: Data? = nil
                     let image = UIGraphicsGetImageFromCurrentImageContext()
                     if let screenshot = image {
@@ -801,6 +795,12 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
 
                 //}
                 UIGraphicsEndImageContext()
+
+                // restore the original state
+                self.frame = originalFrame
+                //self.translatesAutoresizingMaskIntoConstraints = false
+                //self.addConstraints(originalConstraints)
+                //self.scrollView.contentOffset = originalScrollViewOffset
             }
         }
     }
