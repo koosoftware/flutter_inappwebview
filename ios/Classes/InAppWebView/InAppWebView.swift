@@ -791,7 +791,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                         }
                     }
                     
-                    completionHandler(imageData)
+                    //completionHandler(imageData)
 
                 //}
                 UIGraphicsEndImageContext()
