@@ -746,7 +746,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             //let originalFrame = self.frame
             //let originalConstraints = self.constraints
             //let originalScrollViewOffset = self.scrollView.contentOffset
-            let newSize = self.scrollView.contentSize
+            var newSize = self.scrollView.contentSize
 
             // remove any constraints for the web view, and set the size
             // to be size of the content size (will be restored later)
