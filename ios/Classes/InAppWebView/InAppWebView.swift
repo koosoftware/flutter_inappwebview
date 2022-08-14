@@ -739,8 +739,9 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 }
                 
                 completionHandler(imageData)
-                UIGraphicsEndImageContext()
             }
+            
+            UIGraphicsEndImageContext()
 
             // wait for a while for the webview to render in the newly set frame
             /*DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
