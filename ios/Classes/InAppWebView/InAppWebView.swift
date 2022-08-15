@@ -667,7 +667,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             }
         }
 
-        if let ssConf = snapshotConfiguration, let ssRect = snapshotConfiguration.rect {
+        if let ssConf = snapshotConfiguration, let ssRect = ssConf.rect {
             takeSnapshot(with: snapshotConfiguration, completionHandler: {(image, error) -> Void in
                 var imageData: Data? = nil
                 if let screenshot = image {
