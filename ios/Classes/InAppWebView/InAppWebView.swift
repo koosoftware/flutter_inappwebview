@@ -713,7 +713,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                 UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
                 if let context = UIGraphicsGetCurrentContext() {
                     // render the scroll view's layer
-                    self.scrollView.layer.render(in: context)
+                    //self.scrollView.layer.render(in: context)
 
                     // restore the original state
                     self.frame = originalFrame
