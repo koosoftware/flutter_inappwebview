@@ -4,7 +4,6 @@
 //
 //  Created by Lorenzo on 21/10/18.
 //
-
 import Flutter
 import Foundation
 import WebKit
@@ -668,7 +667,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             }
         }
 
-        if let ssConf = snapshotConfiguration {
+        if let ssConf = snapshotConfiguration && let ssRect = snapshotConfiguration.rect {
             takeSnapshot(with: snapshotConfiguration, completionHandler: {(image, error) -> Void in
                 var imageData: Data? = nil
                 if let screenshot = image {
