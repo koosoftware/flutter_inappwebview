@@ -692,83 +692,34 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             })
         }
         else {
-
-            // tempframe to reset view size after image was created
-            /*let tmpFrame: CGRect = self.frame
-            // set full size Frame
-            var fullSizeFrame: CGRect = self.frame
-            fullSizeFrame.size.height = self.scrollView.contentSize.height
-            self.frame = fullSizeFrame
-
-            let newSize = self.scrollView.contentSize
-            self.frame = CGRect(origin: .zero, size: newSize)
-
-            // here the image magic begins
-            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
-            let resizedContext: CGContext = UIGraphicsGetCurrentContext()!
-            self.layer.render(in: resizedContext)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                let image = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-                // reset Frame of view to origin
-                self.frame = tmpFrame
-
-                var imageData: Data? = nil
-                if let screenshot = image {
-                        if let with = with {
-                            switch with["compressFormat"] as! String {
-                            case "JPEG":
-                                let quality = Float(with["quality"] as! Int) / 100
-                                imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
-                                break
-                            case "PNG":
-                                imageData = screenshot.pngData()
-                                break
-                            default:
-                                imageData = screenshot.pngData()
-                            }
-                        }
-                        else {
-                            imageData = screenshot.pngData()
-                        }
-                    }
-                    
-                    completionHandler(imageData)
-            }*/
-            
-
-            
-
-
-
             // save the original size to restore later
-            //let originalFrame = self.frame
-            //let originalConstraints = self.constraints
-            //let originalScrollViewOffset = self.scrollView.contentOffset
-            /*var newSize = self.scrollView.contentSize
+            let originalFrame = self.frame
+            let originalConstraints = self.constraints
+            let originalScrollViewOffset = self.scrollView.contentOffset
+            let newSize = self.scrollView.contentSize
 
             // remove any constraints for the web view, and set the size
             // to be size of the content size (will be restored later)
-            //self.removeConstraints(originalConstraints)
-            //self.translatesAutoresizingMaskIntoConstraints = true
+            self.removeConstraints(originalConstraints)
+            self.translatesAutoresizingMaskIntoConstraints = true
             self.frame = CGRect(origin: .zero, size: newSize)
-            //self.scrollView.contentOffset = .zero
-
+            self.scrollView.contentOffset = .zero
 
             // wait for a while for the webview to render in the newly set frame
-            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
-            if let context = UIGraphicsGetCurrentContext() {
-                // render the scroll view's layer
-                self.scrollView.layer.render(in: context)
-            }
-
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                //defer {
-                    //UIGraphicsEndImageContext()
-                //}
-                //if let context = UIGraphicsGetCurrentContext() {
+                defer {
+                    UIGraphicsEndImageContext()
+                }
+                UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+                if let context = UIGraphicsGetCurrentContext() {
                     // render the scroll view's layer
-                    //self.scrollView.layer.render(in: context)
+                    self.scrollView.layer.render(in: context)
+
+                    // restore the original state
+                    self.frame = originalFrame
+                    self.translatesAutoresizingMaskIntoConstraints = false
+                    self.addConstraints(originalConstraints)
+                    self.scrollView.contentOffset = originalScrollViewOffset
 
                     var imageData: Data? = nil
                     let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -790,48 +741,10 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
                             imageData = screenshot.pngData()
                         }
                     }
-                    UIGraphicsEndImageContext()
+                    
                     completionHandler(imageData)
-
-                //}
-                
-
-                // restore the original state
-                //self.frame = originalFrame
-                //self.translatesAutoresizingMaskIntoConstraints = false
-                //self.addConstraints(originalConstraints)
-                //self.scrollView.contentOffset = originalScrollViewOffset
-
-
-            }*/
-
-            var window: UIWindow? = UIApplication.shared.keyWindow
-            window = UIApplication.shared.windows[0] as? UIWindow
-            UIGraphicsBeginImageContextWithOptions(1000, window!.isOpaque, 0.0)
-            window!.layer.render(in: UIGraphicsGetCurrentContext()!)
-
-            var imageData: Data? = nil
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            if let screenshot = image {
-                if let with = with {
-                    switch with["compressFormat"] as! String {
-                    case "JPEG":
-                        let quality = Float(with["quality"] as! Int) / 100
-                        imageData = screenshot.jpegData(compressionQuality: CGFloat(quality))
-                        break
-                    case "PNG":
-                        imageData = screenshot.pngData()
-                        break
-                    default:
-                        imageData = screenshot.pngData()
-                    }
-                }
-                else {
-                    imageData = screenshot.pngData()
                 }
             }
-            UIGraphicsEndImageContext()
-            completionHandler(imageData)
         }
     }
     
