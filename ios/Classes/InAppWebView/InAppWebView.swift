@@ -703,7 +703,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             self.removeConstraints(originalConstraints)
             self.translatesAutoresizingMaskIntoConstraints = true
             self.frame = CGRect(origin: .zero, size: newSize)
-            self.scrollView.contentOffset = .zero
+            //self.scrollView.contentOffset = .zero
 
             // wait for a while for the webview to render in the newly set frame
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
