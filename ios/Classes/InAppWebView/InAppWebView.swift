@@ -701,7 +701,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             // remove any constraints for the web view, and set the size
             // to be size of the content size (will be restored later)
             self.removeConstraints(originalConstraints)
-            self.translatesAutoresizingMaskIntoConstraints = true
+            //self.translatesAutoresizingMaskIntoConstraints = true
             self.frame = CGRect(origin: .zero, size: newSize)
             self.scrollView.contentOffset = .zero
 
