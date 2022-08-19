@@ -667,7 +667,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
             }
         }
 
-        if let ssConf = snapshotConfiguration, let ssRect = ssConf.rect as? [String: Double] {
+        if let ssConf = snapshotConfiguration, let ssRect = snapshotConfiguration.rect as? [String: Double] {
             takeSnapshot(with: snapshotConfiguration, completionHandler: {(image, error) -> Void in
                 var imageData: Data? = nil
                 if let screenshot = image {
@@ -700,7 +700,7 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate, WKNavi
 
             // remove any constraints for the web view, and set the size
             // to be size of the content size (will be restored later)
-            self.removeConstraints(originalConstraints)
+            //self.removeConstraints(originalConstraints)
             //self.translatesAutoresizingMaskIntoConstraints = true
             self.frame = CGRect(origin: .zero, size: newSize)
             self.scrollView.contentOffset = .zero
